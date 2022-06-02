@@ -33,6 +33,23 @@ class Walk:
         self._sub_flight_plans = list() # example : [['N', 1], ['E', 3], ['S', 1]]
         self._valid = True
 
+    @staticmethod
+    def from_flight_plan(flight_plan, distance):
+        w = Walk()
+
+        # conversion
+        w.add_step(Point(0, 0))
+
+        return w
+
+    def translate(self, offset: Point, size: int):
+        new_points = list()
+
+        for p in self._points:
+            new_points += [p.translate(offset, size)]
+        
+        self._points = new_points
+
     def _add_first_step(self, point: Point) -> None:
         if len(self._points) != 0 and point == self._points[0]:
             self._valid = False
@@ -246,28 +263,32 @@ def max_fp_len(fleet_size):
     return int(np.floor(2 * np.log(fleet_size)) + 1)
 
 if __name__ == "__main__":
-    import pickle
-    import random
+    # import pickle
+    # import random
 
-    walks = pickle.load(open("/workspaces/kore/kore-2022/notebooks/all_walks.pkl", "rb"))
-    tree = WalkTree()
-    walks = list()
+    # walks = pickle.load(open("/workspaces/kore/kore-2022/notebooks/all_walks.pkl", "rb"))
+    # tree = WalkTree()
+    # walks = list()
 
-    kore_map = np.random.random((20, 20))
+    # kore_map = np.random.random((20, 20))
 
-    for _ in range(100):
-        walk = Walk()
-        walk.add_step(Point(10, 10))
+    # for _ in range(100):
+    #     walk = Walk()
+    #     walk.add_step(Point(10, 10))
 
-        for i in range(10):
-            p = helper.Direction.from_index(random.randint(0, 3)).to_point()
-            p = Point(p.x, p.y)
-            walk.add_step(walk.points[-1] + p)
+    #     for i in range(10):
+    #         p = helper.Direction.from_index(random.randint(0, 3)).to_point()
+    #         p = Point(p.x, p.y)
+    #         walk.add_step(walk.points[-1] + p)
 
-        walks += [walk]
+    #     walks += [walk]
 
-    tree.add_walks(walks)
-    tree.set_kore(kore_map)
-    print(tree)
+    # tree.add_walks(walks)
+    # tree.set_kore(kore_map)
+    # print(tree)
     # pickle.dump(walks, open("list.pkl", "wb"))
     # pickle.dump(tree, open("tree.pkl", "wb"))
+
+    w = Walk()
+    w.add_steps([Point(0, 0), Point(1, 0), Point(1, 1)])
+    w.translate(Point(5, 5), 21)
