@@ -26,6 +26,10 @@ class Point(helper.Point):
     def map2(self, other: Union[Tuple[int, int], 'Point'], f: Callable[[int, int], int]) -> 'Point':
         return Point(f(self[0], other[0]), f(self[1], other[1]))
 
+    def __getnewargs__(self):
+        return (self.x, self.y)
+
+
 class Walk:
     def __init__(self) -> None:
         self._points = list()
@@ -257,10 +261,11 @@ class WalkTree:
     def leaves(self):
         return {idx:self._nodes[idx] for idx in range(len(self._nodes)) if self._nodes[idx].children == []}
 
-            
-
 def max_fp_len(fleet_size):
     return int(np.floor(2 * np.log(fleet_size)) + 1)
+
+def distance(p1, p2):
+    return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
 
 if __name__ == "__main__":
     # import pickle
